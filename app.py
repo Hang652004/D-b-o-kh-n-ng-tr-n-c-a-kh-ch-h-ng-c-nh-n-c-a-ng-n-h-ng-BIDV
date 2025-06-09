@@ -81,3 +81,30 @@ if st.button("Kiểm tra"):
     result = "✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay" if prediction == 1 else "❌ Xin lỗi! Hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay"
     st.success(result)
     st.write(result)
+    if prediction == 1:
+        st.success(f"✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay! (Xác suất: {probability:.2%})")
+    else:
+        st.error(f"❌ Xin lỗi! Chúng tôi rất tiêc vì hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay! (Xác suất được duyệt: {probability:.2%})")
+        
+        # Giải thích lý do bằng cách dựa trên hệ số của mô hình
+        st.subheader("🔍 Lý do có thể khiến bị từ chối:")
+
+        features = [
+            "Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh",
+            "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay",
+            "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"
+        ]
+        
+        weights = model.coef_[0]
+        values = input_data[0]
+
+        top_negative_factors = sorted(
+            zip(features, values, weights),
+            key=lambda x: x[2]*x[1]
+        )[:3]  # 3 yếu tố tiêu cực nhất
+
+        for name, val, coef in top_negative_factors:
+            st.write(f"- **{name}**: giá trị `{val}` ảnh hưởng tiêu cực (trọng số: `{coef:.3f}`)")
+
+      
+
