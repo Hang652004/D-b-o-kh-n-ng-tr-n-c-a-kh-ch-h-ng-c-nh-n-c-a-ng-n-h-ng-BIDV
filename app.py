@@ -94,7 +94,7 @@ if prediction == 0:
         if feat in ["Thu nhập người vay", "Thu nhập người đồng vay"]:
             if val < mean_val:
                 negative_flag = True
-                reason = "thu nhập thấp hơn mức trung bình"
+                reason = "thu nhập thấp hơn so với khả năng chi trả khoản nợ"
         elif feat == "Lịch sử tín dụng":
             if val == 0:
                 negative_flag = True
@@ -102,20 +102,7 @@ if prediction == 0:
         elif feat == "Số tiền vay":
             if val > mean_val:
                 negative_flag = True
-                reason = "số tiền vay cao hơn mức trung bình"
-    for i, (feat, val, imp, mean_val) in enumerate(zip(features, values, importances, feature_means)):
-        elif feat == "Người phụ thuộc":
-            if val > mean_val:
-                negative_flag = True
-                reason = "số người phụ thuộc nhiều hơn mức trung bình"
-        elif feat == "Trình độ học vấn":
-            if val == 1:  # Chưa tốt nghiệp
-                negative_flag = True
-                reason = "trình độ học vấn chưa tốt nghiệp"
-        elif feat == "Tự kinh doanh":
-            if val == 1:
-                negative_flag = True
-                reason = "có thể rủi ro cao do tự kinh doanh"
+                reason = "số tiền vay cao hơn so với khả năng chi trả khoản nợ"
     explanations = sorted(explanations, key=lambda x: x[0], reverse=True)
     if explanations:
         for _, text in explanations:
