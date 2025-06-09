@@ -86,25 +86,25 @@ if st.button("Kiểm tra"):
     else:
         st.error("❌ Xin lỗi! Chúng tôi rất tiếc vì hồ sơ của khách hàng chưa đáp ứng được yêu cầu vay vốn.")
         
-        # Giải thích lý do bằng cách dựa trên hệ số của mô hình
-        st.subheader("🔍 Lý do có thể khiến bị từ chối:")
+        st.subheader("🔍 Các yếu tố quan trọng ảnh hưởng đến quyết định:")
 
-        features = [
-            "Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh",
-            "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay",
-            "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"
-        ]
-        
-        weights = model.coef_[0]
-        values = input_data[0]
+features = [
+    "Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh",
+    "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay",
+    "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"
+]
 
-        top_negative_factors = sorted(
-            zip(features, values, weights),
-            key=lambda x: x[2]*x[1]
-        )[:3]  # 3 yếu tố tiêu cực nhất
+importances = model.feature_importances_
+values = input_data[0]
 
-        for name, val, coef in top_negative_factors:
-            st.write(f"- **{name}**: giá trị `{val}` ảnh hưởng tiêu cực (trọng số: `{coef:.3f}`)")
+# Ghép đặc trưng với giá trị và độ quan trọng
+feature_info = list(zip(features, values, importances))
+
+# Sắp xếp theo độ quan trọng giảm dần
+top_features = sorted(feature_info, key=lambda x: x[2], reverse=True)[:3]
+
+for name, val, importance in top_features:
+  st.write(f"- **{name}**: giá trị `{val}` với độ quan trọng `{importance:.3f}`")
 
       
 
