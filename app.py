@@ -71,8 +71,6 @@ self_employed = 1 if self_employed == "Có" else 0
 credit_history = 1.0 if credit_history == "Có" else 0.0
 property_map = {"Đô thị": 2, "Ngoại thành": 1, "Nông thôn": 0}
 property_area = property_map[property_area]
-
-# Khi bấm nút "Kiểm tra"
 if st.button("Kiểm tra"):
     input_data = np.array([[gender, married, dependents, education, self_employed,
                             applicant_income, coapplicant_income, loan_amount,
@@ -81,15 +79,30 @@ if st.button("Kiểm tra"):
     result = "✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay" if prediction == 1 else "❌ Xin lỗi! Hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay"
     st.success(result)
     st.write(result)
-    st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:") if prediction == 0:
-        features = ["Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh", "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay", "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"]
+
+    if prediction == 0:
+        st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:")
+
+        features = [
+            "Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh",
+            "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay",
+            "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"
+        ]
         importances = model.feature_importances_
         values = input_data[0]
-        feature_means = X_train.mean(axis=0).values
+
+        # Nếu bạn không có biến mean_val hoặc feature_means thì nên thay thế hoặc loại bỏ phần này
+        # Dưới đây giả sử bạn có mean_val hoặc feature_means tương ứng từng feature
+        # Nếu không có, bạn có thể thay bằng giá trị ngưỡng cố định hoặc bỏ điều kiện so sánh
+
+        # Ví dụ giả định mean_val cho từng feature (bạn cần thay thế bằng giá trị thực tế)
+        mean_vals = [0.5, 0.5, 1, 0, 0, 5000, 2000, 150000, 360, 1, 1]  # Đây chỉ là ví dụ
+
         explanations = []
-        for i, (feat, val, imp) in enumerate(zip(features, values, importances)):
+        for feat, val, imp, mean_val in zip(features, values, importances, mean_vals):
             negative_flag = False
             reason = ""
+
             if feat in ["Thu nhập người vay", "Thu nhập người đồng vay"]:
                 if val < mean_val:
                     negative_flag = True
@@ -102,9 +115,14 @@ if st.button("Kiểm tra"):
                 if val > mean_val:
                     negative_flag = True
                     reason = "số tiền vay cao hơn so với khả năng chi trả khoản nợ"
-            explanations = sorted(explanations, key=lambda x: x[0], reverse=True)
-            if explanations:
-                for _, text in explanations:
-                    st.write(text)
-            else:
-                st.write("Không thể xác định rõ lý do, vui lòng kiểm tra lại thông tin để biết thêm chi tiết.")
+
+            if negative_flag:
+                explanations.append((imp, f"- **{feat}**: {reason} (giá trị nhập: {val}, độ quan trọng: {imp:.3f})"))
+
+        explanations = sorted(explanations, key=lambda x: x[0], reverse=True)
+
+        if explanations:
+            for _, text in explanations:
+                st.write(text)
+        else:
+            st.write("Không thể xác định rõ lý do, vui lòng kiểm tra lại thông tin để biết thêm chi tiết.")
