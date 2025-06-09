@@ -95,7 +95,7 @@ if st.button("Kiểm tra"):
         feature_means = X_train.mean(axis=0).values
 
         explanations = []
-        for i, (feat, val, imp, mean_val) in enumerate(zip(features, values, importances, feature_means)):
+      for i, (feat, val, imp) in enumerate(zip(features, values, importances)):
             negative_flag = False
             reason = ""
 
@@ -123,11 +123,7 @@ if st.button("Kiểm tra"):
                 if val == 1:
                     negative_flag = True
                     reason = "có thể rủi ro cao do tự kinh doanh"
-            # Bạn có thể thêm các logic khác tùy ý
-
-            if negative_flag:
-                explanations.append((imp, f"- **{feat}**: {reason} (giá trị nhập: {val}, độ quan trọng: {imp:.3f})"))
-
+    
         # Sắp xếp theo độ quan trọng giảm dần (không giới hạn số lượng)
         explanations = sorted(explanations, key=lambda x: x[0], reverse=True)
 
