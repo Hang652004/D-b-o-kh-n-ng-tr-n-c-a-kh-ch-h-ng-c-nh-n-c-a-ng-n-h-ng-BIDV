@@ -93,8 +93,8 @@ if prediction == 0:
         reason = ""
         if feat in ["Thu nhập người vay", "Thu nhập người đồng vay"]:
             if val < mean_val:
-            negative_flag = True
-            reason = "thu nhập thấp hơn mức trung bình"
+                negative_flag = True
+                reason = "thu nhập thấp hơn mức trung bình"
         elif feat == "Lịch sử tín dụng":
             if val == 0:
                 negative_flag = True
