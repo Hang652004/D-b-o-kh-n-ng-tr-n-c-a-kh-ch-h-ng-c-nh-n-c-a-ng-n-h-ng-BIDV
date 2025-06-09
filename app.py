@@ -78,6 +78,6 @@ if st.button("Dự đoán"):
                             applicant_income, coapplicant_income, loan_amount,
                             loan_term, credit_history, property_area]])
     prediction = model.predict(input_data)[0]
-    result = "✅ Được duyệt vay" if prediction == 1 else "❌ Không được duyệt vay"
+    result = "✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay" if prediction == 1 else "❌ Xin lỗi! Hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay"
     st.success(result)
     st.write(result)
