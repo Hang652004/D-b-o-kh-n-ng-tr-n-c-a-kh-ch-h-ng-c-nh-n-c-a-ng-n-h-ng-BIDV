@@ -82,9 +82,9 @@ if st.button("Kiểm tra"):
     st.success(result)
     st.write(result)
     if prediction == 1:
-        st.success(f"✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay! (Xác suất: {probability:.2%})")
+        st.success("✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay!")
     else:
-        st.error(f"❌ Xin lỗi! Chúng tôi rất tiêc vì hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay! (Xác suất được duyệt: {probability:.2%})")
+        st.error("❌ Xin lỗi! Chúng tôi rất tiếc vì hồ sơ của khách hàng chưa đáp ứng được yêu cầu vay vốn.")
         
         # Giải thích lý do bằng cách dựa trên hệ số của mô hình
         st.subheader("🔍 Lý do có thể khiến bị từ chối:")
