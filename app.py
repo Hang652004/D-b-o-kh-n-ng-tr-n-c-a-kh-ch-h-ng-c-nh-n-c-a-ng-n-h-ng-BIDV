@@ -82,9 +82,9 @@ if st.button("Kiểm tra"):
     st.success(result)
     st.write(result)
     if prediction == 0:
-    st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:")
+        st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:")
 
-    features = ["Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh", "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay", "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"]
+        features = ["Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh", "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay", "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"]
 
         importances = model.feature_importances_
         values = input_data[0]
