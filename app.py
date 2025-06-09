@@ -56,12 +56,12 @@ married = st.selectbox("Tình trạng hôn nhân", ["Độc thân", "Đã kết 
 dependents = st.selectbox("Số người phụ thuộc", [0, 1, 2, 3])
 education = st.selectbox("Trình độ học vấn", ["Tốt nghiệp", "Chưa tốt nghiệp"])
 self_employed = st.selectbox("Tự kinh doanh", ["Không", "Có"])
-applicant_income = st.number_input("Thu nhập người vay (VND)", min_value=0)
-coapplicant_income = st.number_input("Thu nhập người đồng vay (VND)", min_value=0)
-loan_amount = st.number_input("Số tiền vay (VND)", min_value=0)
-loan_term = st.number_input("Thời hạn vay (tháng)", min_value=0)
+applicant_income = st.number_input("Thu nhập người vay (VND)", min_value>0)
+coapplicant_income = st.number_input("Thu nhập người đồng vay (VND)", min_value>0)
+loan_amount = st.number_input("Số tiền vay (VND)", min_value>0)
+loan_term = st.number_input("Thời hạn vay (tháng)", min_value>0)
 credit_history = st.selectbox("Lịch sử tín dụng tốt?", ["Có", "Không"])
-property_area = st.selectbox("Khu vực tài sản", ["Đô thị", "Nông thôn", "Bán đô thị"])
+property_area = st.selectbox("Khu vực tài sản", ["Đô thị", "Nông thôn", "Ngoại thành"])
 
 # Map các giá trị nhập thành số
 gender = 1 if gender == "Nam" else 0
@@ -69,11 +69,11 @@ married = 1 if married == "Đã kết hôn" else 0
 education = 0 if education == "Tốt nghiệp" else 1
 self_employed = 1 if self_employed == "Có" else 0
 credit_history = 1.0 if credit_history == "Có" else 0.0
-property_map = {"Đô thị": 2, "Bán đô thị": 1, "Nông thôn": 0}
+property_map = {"Đô thị": 2, "Ngoại thành": 1, "Nông thôn": 0}
 property_area = property_map[property_area]
 
-# Khi bấm nút "Dự đoán"
-if st.button("Dự đoán"):
+# Khi bấm nút "Kiểm tra"
+if st.button("Kiểm tra"):
     input_data = np.array([[gender, married, dependents, education, self_employed,
                             applicant_income, coapplicant_income, loan_amount,
                             loan_term, credit_history, property_area]])
