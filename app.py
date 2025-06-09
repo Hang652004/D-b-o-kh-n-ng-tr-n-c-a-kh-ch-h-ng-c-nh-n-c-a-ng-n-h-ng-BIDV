@@ -78,34 +78,35 @@ if st.button("Kiểm tra"):
                             applicant_income, coapplicant_income, loan_amount,
                             loan_term, credit_history, property_area]])
     prediction = model.predict(input_data)[0]
-    result = "✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay" if prediction == 1 else "❌ Xin lỗi! Hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay"
-    st.success(result)
-    st.write(result)
-if prediction == 0:
-    st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:")
-    features = ["Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh", "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay", "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"]
-    importances = model.feature_importances_
-    values = input_data[0]
-    feature_means = X_train.mean(axis=0).values
-    explanations = []
-    for i, (feat, val, imp) in enumerate(zip(features, values, importances)):
-        negative_flag = False
-        reason = ""
-        if feat in ["Thu nhập người vay", "Thu nhập người đồng vay"]:
-            if val < mean_val:
-                negative_flag = True
-                reason = "thu nhập thấp hơn so với khả năng chi trả khoản nợ"
-        elif feat == "Lịch sử tín dụng":
-            if val == 0:
-                negative_flag = True
-                reason = "lịch sử tín dụng không tốt"
-        elif feat == "Số tiền vay":
-            if val > mean_val:
-                negative_flag = True
-                reason = "số tiền vay cao hơn so với khả năng chi trả khoản nợ"
-    explanations = sorted(explanations, key=lambda x: x[0], reverse=True)
-    if explanations:
-        for _, text in explanations:
-            st.write(text)
-    else:
-        st.write("Không thể xác định rõ lý do từ mô hình, vui lòng kiểm tra lại thông tin hoặc liên hệ ngân hàng để biết thêm chi tiết.")
+    if prediction == 1
+        result = "✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay" else "❌ Xin lỗi! Hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay"
+        st.success(result)
+        st.write(result)
+    if prediction == 0:
+        st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:")
+        features = ["Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh", "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay", "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"]
+        importances = model.feature_importances_
+        values = input_data[0]
+        feature_means = X_train.mean(axis=0).values
+        explanations = []
+        for i, (feat, val, imp) in enumerate(zip(features, values, importances)):
+            negative_flag = False
+            reason = ""
+            if feat in ["Thu nhập người vay", "Thu nhập người đồng vay"]:
+                if val < mean_val:
+                    negative_flag = True
+                    reason = "thu nhập thấp hơn so với khả năng chi trả khoản nợ"
+            elif feat == "Lịch sử tín dụng":
+                if val == 0:
+                    negative_flag = True
+                    reason = "lịch sử tín dụng không tốt"
+            elif feat == "Số tiền vay":
+                if val > mean_val:
+                    negative_flag = True
+                    reason = "số tiền vay cao hơn so với khả năng chi trả khoản nợ"
+        explanations = sorted(explanations, key=lambda x: x[0], reverse=True)
+        if explanations:
+            for _, text in explanations:
+                st.write(text)
+        else:
+            st.write("Không thể xác định rõ lý do, vui lòng kiểm tra lại thông tin để biết thêm chi tiết.")
