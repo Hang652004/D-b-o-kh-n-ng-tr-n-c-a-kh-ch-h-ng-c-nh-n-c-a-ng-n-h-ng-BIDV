@@ -6,7 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 import joblib
 
 # Đọc dữ liệu
-df = pd.read_csv('/content/drive/MyDrive/trí tuệ nhân tạo/loan.csv')
+df = pd.read_csv('loan.csv')
 
 # Xử lý dữ liệu thiếu
 df.fillna({
