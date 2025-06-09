@@ -81,30 +81,58 @@ if st.button("Kiểm tra"):
     result = "✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay" if prediction == 1 else "❌ Xin lỗi! Hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay"
     st.success(result)
     st.write(result)
-    if prediction == 1:
-        st.success("✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay!")
-    else:
-        st.error("❌ Xin lỗi! Chúng tôi rất tiếc vì hồ sơ của khách hàng chưa đáp ứng được yêu cầu vay vốn.")
-        
-        st.subheader("🔍 Các yếu tố quan trọng ảnh hưởng đến quyết định:")
+         if prediction == 0:
+        st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:")
 
-features = [
-    "Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh",
-    "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay",
-    "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"
-]
+        features = [
+            "Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh",
+            "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay",
+            "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"
+        ]
 
-importances = model.feature_importances_
-values = input_data[0]
+        importances = model.feature_importances_
+        values = input_data[0]
+        feature_means = X_train.mean(axis=0).values
 
-# Ghép đặc trưng với giá trị và độ quan trọng
-feature_info = list(zip(features, values, importances))
+        explanations = []
+        for i, (feat, val, imp, mean_val) in enumerate(zip(features, values, importances, feature_means)):
+            negative_flag = False
+            reason = ""
 
-# Sắp xếp theo độ quan trọng giảm dần
-top_features = sorted(feature_info, key=lambda x: x[2], reverse=True)[:3]
+            if feat in ["Thu nhập người vay", "Thu nhập người đồng vay"]:
+                if val < mean_val:
+                    negative_flag = True
+                    reason = "thu nhập thấp hơn mức trung bình"
+            elif feat == "Lịch sử tín dụng":
+                if val == 0:
+                    negative_flag = True
+                    reason = "lịch sử tín dụng không tốt"
+            elif feat == "Số tiền vay":
+                if val > mean_val:
+                    negative_flag = True
+                    reason = "số tiền vay cao hơn mức trung bình"
+            elif feat == "Người phụ thuộc":
+                if val > mean_val:
+                    negative_flag = True
+                    reason = "số người phụ thuộc nhiều hơn mức trung bình"
+            elif feat == "Trình độ học vấn":
+                if val == 1:  # Chưa tốt nghiệp
+                    negative_flag = True
+                    reason = "trình độ học vấn chưa tốt nghiệp"
+            elif feat == "Tự kinh doanh":
+                if val == 1:
+                    negative_flag = True
+                    reason = "có thể rủi ro cao do tự kinh doanh"
+            # Bạn có thể thêm các logic khác tùy ý
 
-for name, val, importance in top_features:
-  st.write(f"- **{name}**: giá trị `{val}` với độ quan trọng `{importance:.3f}`")
+            if negative_flag:
+                explanations.append((imp, f"- **{feat}**: {reason} (giá trị nhập: {val}, độ quan trọng: {imp:.3f})"))
 
-      
+        # Sắp xếp theo độ quan trọng giảm dần (không giới hạn số lượng)
+        explanations = sorted(explanations, key=lambda x: x[0], reverse=True)
 
+        if explanations:
+            for _, text in explanations:
+                st.write(text)
+        else:
+            st.write("Không thể xác định rõ lý do từ mô hình, vui lòng kiểm tra lại thông tin hoặc liên hệ ngân hàng để biết thêm chi tiết.")
