@@ -117,7 +117,7 @@ if st.button("Kiểm tra"):
                     reason = "số tiền vay cao hơn so với khả năng chi trả khoản nợ"
 
             if negative_flag:
-                explanations.append((imp, f"- **{feat}**: {reason} (giá trị nhập: {val}, độ quan trọng: {imp:.3f})"))
+                explanations.append((imp, f"- **{feat}**: {reason} "))
 
         explanations = sorted(explanations, key=lambda x: x[0], reverse=True)
 
