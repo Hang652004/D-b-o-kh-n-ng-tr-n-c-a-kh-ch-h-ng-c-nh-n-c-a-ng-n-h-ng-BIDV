@@ -103,6 +103,7 @@ if prediction == 0:
             if val > mean_val:
                 negative_flag = True
                 reason = "số tiền vay cao hơn mức trung bình"
+    for i, (feat, val, imp, mean_val) in enumerate(zip(features, values, importances, feature_means)):
         elif feat == "Người phụ thuộc":
             if val > mean_val:
                 negative_flag = True
