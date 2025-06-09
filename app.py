@@ -78,12 +78,10 @@ if st.button("Kiểm tra"):
                             applicant_income, coapplicant_income, loan_amount,
                             loan_term, credit_history, property_area]])
     prediction = model.predict(input_data)[0]
-        if prediction == 1
-            result = "✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay" else "❌ Xin lỗi! Hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay"
-            st.success(result)
-            st.write(result)
-        if prediction == 0:
-            st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:")
+        result = "✅ Hồ sơ của khách hàng đã đáp ứng đủ yêu cầu nên được duyệt vay" if prediction == 1 else "❌ Xin lỗi! Hồ sơ của khách hàng chưa đáp ứng đủ yêu cầu nên không được duyệt khoản vay"
+        st.success(result)
+        st.write(result)
+        st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:") if prediction == 0:
             features = ["Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh", "Thu nhập người vay", "Thu nhập người đồng vay", "Số tiền vay", "Thời hạn vay", "Lịch sử tín dụng", "Khu vực"]
             importances = model.feature_importances_
             values = input_data[0]
