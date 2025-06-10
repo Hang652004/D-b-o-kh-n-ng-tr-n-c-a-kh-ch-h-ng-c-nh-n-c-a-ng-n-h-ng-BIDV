@@ -81,7 +81,7 @@ if st.button("Kiểm tra"):
     st.write(result)
 
     if prediction == 0:
-        st.subheader("🔍 Lý do có thể khiến hồ sơ bị từ chối:")
+        st.subheader("🔍 Lý do dự đoán hồ sơ bị từ chối:")
 
         features = [
             "Giới tính", "Hôn nhân", "Người phụ thuộc", "Trình độ học vấn", "Tự kinh doanh",
